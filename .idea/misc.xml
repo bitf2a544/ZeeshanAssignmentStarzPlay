@@ -1,0 +1,22 @@
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Extra Projects/Assignments/ZeeshanAssignment_MSD/ZeeshanAssignment_MSD/app/src/main/res/layout/activity_card.xml" value="0.19583333333333333" />
+        <entry key="..\:/Extra Projects/Assignments/ZeeshanAssignment_MSD/ZeeshanAssignment_MSD/app/src/main/res/layout/activity_main.xml" value="0.19583333333333333" />
+        <entry key="..\:/Extra Projects/Assignments/ZeeshanAssignment_MSD/ZeeshanAssignment_MSD/app/src/main/res/layout/card_item_layout.xml" value="0.19583333333333333" />
+        <entry key="..\:/Extra Projects/Assignments/ZeeshanAssignment_MSD/ZeeshanAssignment_MSD/app/src/main/res/layout/cards_list_fragment.xml" value="0.19583333333333333" />
+        <entry key="..\:/Extra Projects/Assignments/ZeeshanAssignment_MSD/ZeeshanAssignment_MSD/app/src/main/res/layout/fragment_card.xml" value="0.19583333333333333" />
+        <entry key="..\:/QProjects/Extra Projects/app/src/main/res/layout/activity_card.xml" value="0.2028985507246377" />
+        <entry key="..\:/QProjects/Extra Projects/app/src/main/res/layout/activity_main.xml" value="0.2028985507246377" />
+        <entry key="..\:/QProjects/Extra Projects/app/src/main/res/layout/fragment_card.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

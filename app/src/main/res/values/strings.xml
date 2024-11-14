@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ZeeshanAssignmentStarzPlay</string>
+    <string name="app_name">Zee Assignment StarzPlay</string>
+    <string name="text_suit">Suit:</string>
+    <string name="get_started">Get Started</string>
+    <string name="open_player_screen">Open Player Screen</string>
+    <string name="search">Search</string>
 </resources>
