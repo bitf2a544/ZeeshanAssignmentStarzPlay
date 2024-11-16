@@ -1,5 +1,6 @@
-package com.example.mylibrary.fragment
+package com.example.zeeshanassignment.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.mylibrary.BuildConfig
 import com.example.mylibrary.R
 import com.example.mylibrary.data.model.CarouselItem
 import com.example.mylibrary.databinding.DetailFragmentBinding
 import com.example.mylibrary.utils.Constants
+import com.example.mylibrary.BuildConfig
+import com.example.zeeshanassignment.activity.VideoPlayerActivity
 
 class DetailFragment : Fragment() {
 
@@ -35,7 +37,7 @@ class DetailFragment : Fragment() {
             binding.playBtn.visibility = View.GONE
         }
         binding.playBtn.setOnClickListener {
-
+            startActivity(Intent(requireContext(),VideoPlayerActivity::class.java))
         }
         setTextInCardView()
         loadImageInImageView()

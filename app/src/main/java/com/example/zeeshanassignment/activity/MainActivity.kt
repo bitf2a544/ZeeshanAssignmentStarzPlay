@@ -1,10 +1,9 @@
-package com.example.zeeshanassignment
+package com.example.zeeshanassignment.activity
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mylibrary.databinding.ActivityMainBinding
-import com.example.mylibrary.viewmodel.MainViewModel
+import com.example.zeeshanassignment.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
