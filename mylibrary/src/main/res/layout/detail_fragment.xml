@@ -31,7 +31,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageTV"
         tools:text="Test" />
 
-
     <TextView
         android:id="@+id/overviewTV"
         android:layout_width="match_parent"

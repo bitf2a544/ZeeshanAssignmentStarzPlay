@@ -1,6 +1,7 @@
 package com.example.mylibrary.fragment
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -16,12 +17,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
-import com.example.mylibrary.adapter.CarouselListAdapter
+import com.example.mylibrary.adapter.ListAdapter
 import com.example.mylibrary.data.model.CarouselItem
 import com.example.mylibrary.data.model.Carousels
-import com.example.mylibrary.databinding.CardsListFragmentBinding
 import com.example.mylibrary.enum.MediaTypes
 import com.example.mylibrary.CarouselItemClickListener
+import com.example.mylibrary.databinding.CarouselListFragmentBinding
 import com.example.mylibrary.utils.Constants.Companion.ARG_PARAM
 import com.example.mylibrary.utils.Status
 import com.example.mylibrary.viewmodel.MainViewModel
@@ -36,15 +37,15 @@ import java.nio.charset.Charset
 
 @AndroidEntryPoint
 class HomeListingFragment : Fragment(), CarouselItemClickListener {
-    private lateinit var binding: CardsListFragmentBinding
-    private lateinit var cardsAdapter: CarouselListAdapter
+    private lateinit var binding: CarouselListFragmentBinding
+    private lateinit var cardsAdapter: ListAdapter
     private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = CardsListFragmentBinding.inflate(layoutInflater)
+        binding = CarouselListFragmentBinding.inflate(layoutInflater)
         setupUI()
         fetchCardsListing()
         setupObserver()
@@ -59,7 +60,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
     private fun setUpCurrencyRecyclerView() {
         binding.currencyRecyclerView.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        cardsAdapter = CarouselListAdapter(requireContext(), arrayListOf(), this)
+        cardsAdapter = ListAdapter(requireContext(), arrayListOf(), this)
         binding.currencyRecyclerView.addItemDecoration(
             DividerItemDecoration(
                 binding.currencyRecyclerView.context,
@@ -69,6 +70,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         binding.currencyRecyclerView.adapter = cardsAdapter
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setUpSearchField() {
         binding.searchET.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -164,11 +166,11 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         }
     }
 
-    private fun renderCardsList(cardsList: MutableList<CarouselItem>) {
-        var finalList: MutableList<Carousels> = mutableListOf()
-        var tvCarousal = Carousels()
-        var movieCarousal = Carousels()
-        var otherCarousal = Carousels()
+/*    private fun renderCardsList(cardsList: MutableList<CarouselItem>) {
+        val finalList: MutableList<Carousels> = mutableListOf()
+        val tvCarousal = Carousels()
+        val movieCarousal = Carousels()
+        val otherCarousal = Carousels()
         cardsList.forEach {
             if(it.mediaType.toString() == MediaTypes.TV.identifier) {
                 tvCarousal.mediaType = it.mediaType.toString()
@@ -190,6 +192,26 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
 
         cardsAdapter.updateData(finalList)
         //cardsAdapter.updateData(cardsList)
+    }*/
+
+    private fun renderCardsList(cardsList: MutableList<CarouselItem>) {
+        // Map to group CarouselItems by mediaType
+        val map = mutableMapOf<String, Carousels>()
+
+        // Group the items into their respective media types
+        cardsList.forEach { item ->
+            val mediaType = item.mediaType.toString()
+
+            // If the group for this media type doesn't exist, create a new one
+            val carousal = map.getOrPut(mediaType) { Carousels().apply { this.mediaType = mediaType } }
+            carousal.results.add(item)
+        }
+
+        // Convert the map values to a list for the adapter
+        val finalList = map.values.toMutableList()
+
+        // Update the adapter with the grouped list
+        cardsAdapter.updateData(finalList)
     }
 
     override fun onCLick(carouselItem: CarouselItem) {

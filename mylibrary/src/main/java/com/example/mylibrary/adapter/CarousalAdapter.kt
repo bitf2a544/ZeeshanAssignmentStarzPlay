@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.mylibrary.BuildConfig
 import com.example.mylibrary.CarouselItemClickListener
 import com.example.mylibrary.R
 import com.example.mylibrary.data.model.CarouselItem
@@ -35,7 +36,7 @@ class CarousalAdapter(
                 }
 
                 Glide.with(context)
-                    .load("https://image.tmdb.org/t/p/original/" + imgName) // image url
+                    .load(BuildConfig.IMAGE_BASE_URL + imgName)
                     .placeholder(R.drawable.unknow_image)
                     .error(R.drawable.unknow_image)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -10,7 +10,7 @@
         android:name="com.example.mylibrary.fragment.HomeListingFragment"
         android:label="cards_list_fragment"
         app:defaultNavHost="true"
-        tools:layout="@layout/cards_list_fragment">
+        tools:layout="@layout/carousel_list_fragment">
         <action
             android:id="@+id/action_CardsListFragment_to_cardFragment"
             app:destination="@id/cardFragment" />
@@ -20,5 +20,5 @@
         android:id="@+id/cardFragment"
         android:name="com.example.mylibrary.fragment.DetailFragment"
         android:label="card_fragment"
-        tools:layout="@layout/fragment_card" />
+        tools:layout="@layout/detail_fragment" />
 </navigation>
