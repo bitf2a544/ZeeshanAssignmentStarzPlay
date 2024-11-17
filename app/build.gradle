@@ -22,13 +22,13 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
-
+        buildConfigField 'String', 'API_KEY', "\"3d0cda4466f269e793e9283f6ce0b75e\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -92,7 +92,7 @@ dependencies {
     //unit testing dependencies
      testImplementation 'junit:junit:4.13.2'
      androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    /*
+
       androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
       testImplementation "androidx.arch.core:core-testing:2.2.0"
       androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
@@ -101,7 +101,7 @@ dependencies {
       testImplementation "org.mockito:mockito-core:4.3.1"
       testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
       testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
-      testImplementation "org.mockito:mockito-inline:3.11.2"*/
+      testImplementation "org.mockito:mockito-inline:3.11.2"
 
 }
 // Allow references to generated code
