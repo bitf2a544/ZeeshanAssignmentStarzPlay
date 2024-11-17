@@ -7,7 +7,7 @@ import android.net.Uri
 import android.view.View
 
 import androidx.media3.common.MediaItem
-import com.example.zeeshanassignment.R
+import com.example.zeeshanassignment.BuildConfig
 import com.example.zeeshanassignment.databinding.ActivityVideoPlayerBinding
 
 class VideoPlayerActivity : AppCompatActivity() {
@@ -32,8 +32,7 @@ class VideoPlayerActivity : AppCompatActivity() {
         binding.playerView.player = exoPlayer
 
         // Set the video URL
-        val videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-        val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
+        val mediaItem = MediaItem.fromUri(Uri.parse(BuildConfig.VIDEO_LINK))
         exoPlayer.setMediaItem(mediaItem)
 
         // Prepare and play the video

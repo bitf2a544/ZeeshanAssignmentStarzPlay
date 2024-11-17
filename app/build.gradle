@@ -23,6 +23,7 @@ android {
         versionName "1.0"
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
         buildConfigField 'String', 'API_KEY', "\"3d0cda4466f269e793e9283f6ce0b75e\""
+        buildConfigField 'String', 'VIDEO_LINK', "\"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
