@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mylibrary.R
 import com.example.mylibrary.data.model.CarouselItem
-import com.example.mylibrary.databinding.DetailFragmentBinding
+import com.example.zeeshanassignment.databinding.DetailFragmentBinding
 import com.example.mylibrary.utils.Constants
 import com.example.mylibrary.BuildConfig
 import com.example.mylibrary.enum.MediaTypes

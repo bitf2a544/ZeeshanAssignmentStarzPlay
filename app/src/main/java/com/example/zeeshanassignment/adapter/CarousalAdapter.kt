@@ -1,4 +1,4 @@
-package com.example.mylibrary.adapter
+package com.example.zeeshanassignment.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.mylibrary.BuildConfig
-import com.example.mylibrary.CarouselItemClickListener
+import com.example.zeeshanassignment.listener.CarouselItemClickListener
 import com.example.mylibrary.R
 import com.example.mylibrary.data.model.CarouselItem
-import com.example.mylibrary.databinding.CarouselItemLayoutBinding
+import com.example.zeeshanassignment.databinding.CarouselItemLayoutBinding
 
 
 class CarousalAdapter(

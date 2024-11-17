@@ -16,11 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
-import com.example.mylibrary.adapter.ListAdapter
+import com.example.zeeshanassignment.adapter.ListAdapter
 import com.example.mylibrary.data.model.CarouselItem
-import com.example.mylibrary.data.model.Carousels
-import com.example.mylibrary.CarouselItemClickListener
-import com.example.mylibrary.databinding.CarouselListFragmentBinding
+import com.example.zeeshanassignment.listener.CarouselItemClickListener
+import com.example.zeeshanassignment.databinding.CarouselListFragmentBinding
 import com.example.mylibrary.utils.Constants.Companion.ARG_PARAM
 import com.example.mylibrary.utils.Status
 import com.example.mylibrary.viewmodel.MainViewModel

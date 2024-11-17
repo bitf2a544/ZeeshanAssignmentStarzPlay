@@ -1,4 +1,4 @@
-package com.example.mylibrary.adapter
+package com.example.zeeshanassignment.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mylibrary.CarouselItemClickListener
+import com.example.zeeshanassignment.listener.CarouselItemClickListener
 
-import com.example.mylibrary.databinding.ListItemLayoutBinding
 import com.example.mylibrary.data.model.Carousels
 import com.example.mylibrary.enum.MediaTypes
+import com.example.zeeshanassignment.databinding.ListItemLayoutBinding
 
 class ListAdapter(
     val context: Context,

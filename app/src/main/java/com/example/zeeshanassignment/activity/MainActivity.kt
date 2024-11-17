@@ -2,7 +2,7 @@ package com.example.zeeshanassignment.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mylibrary.databinding.ActivityMainBinding
+import com.example.zeeshanassignment.databinding.ActivityMainBinding
 import com.example.zeeshanassignment.R
 import dagger.hilt.android.AndroidEntryPoint
 
