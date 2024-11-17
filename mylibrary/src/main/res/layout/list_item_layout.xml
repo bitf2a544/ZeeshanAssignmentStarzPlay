@@ -16,8 +16,9 @@
         android:gravity="start"
         android:text="@string/app_name"
         android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textSize="15sp"
         android:textStyle="bold"
+        android:textAllCaps="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

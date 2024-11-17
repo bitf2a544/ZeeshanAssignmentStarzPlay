@@ -22,7 +22,6 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
-       // buildConfigField 'String', 'IMAGE_BASE_URL', "\"https://image.tmdb.org/t/p/original/\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

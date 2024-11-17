@@ -4,4 +4,6 @@
     <string name="get_started">Get Started</string>
     <string name="open_player_screen">Open Player Screen</string>
     <string name="search">Search</string>
+    <string name="no_data_found">Please refine your search and try again.</string>
+    <string name="fetch_local_data">Fetch Local Data</string>
 </resources>

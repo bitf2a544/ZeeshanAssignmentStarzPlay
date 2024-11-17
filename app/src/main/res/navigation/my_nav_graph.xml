@@ -13,7 +13,7 @@
         tools:layout="@layout/carousel_list_fragment">
         <action
             android:id="@+id/action_CardsListFragment_to_cardFragment"
-            app:destination="@id/cardFragment" />
+            app:destination="@id/cardFragment"/>
     </fragment>
 
     <fragment

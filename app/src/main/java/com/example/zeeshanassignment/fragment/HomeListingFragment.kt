@@ -1,6 +1,5 @@
 package com.example.zeeshanassignment.fragment
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +19,6 @@ import com.example.mylibrary.R
 import com.example.mylibrary.adapter.ListAdapter
 import com.example.mylibrary.data.model.CarouselItem
 import com.example.mylibrary.data.model.Carousels
-import com.example.mylibrary.enum.MediaTypes
 import com.example.mylibrary.CarouselItemClickListener
 import com.example.mylibrary.databinding.CarouselListFragmentBinding
 import com.example.mylibrary.utils.Constants.Companion.ARG_PARAM
@@ -34,10 +32,11 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.nio.charset.Charset
 
-
 @AndroidEntryPoint
 class HomeListingFragment : Fragment(), CarouselItemClickListener {
-    private lateinit var binding: CarouselListFragmentBinding
+
+    private var _binding: CarouselListFragmentBinding? = null
+    private val binding get() = _binding!!
     private lateinit var cardsAdapter: ListAdapter
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -45,38 +44,36 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = CarouselListFragmentBinding.inflate(layoutInflater)
-        setupUI()
-        fetchCardsListing()
-        setupObserver()
-        setUpSearchField()
+        _binding = CarouselListFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    private fun setupUI() {
-        setUpCurrencyRecyclerView()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpRecyclerView()
+        setUpSearchField()
+        setupObserver()
     }
 
-    private fun setUpCurrencyRecyclerView() {
-        binding.currencyRecyclerView.layoutManager =
+    private fun setUpRecyclerView() {
+        binding.listRV.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         cardsAdapter = ListAdapter(requireContext(), arrayListOf(), this)
-        binding.currencyRecyclerView.addItemDecoration(
+        binding.listRV.addItemDecoration(
             DividerItemDecoration(
-                binding.currencyRecyclerView.context,
-                (binding.currencyRecyclerView.layoutManager as LinearLayoutManager).orientation
+                binding.listRV.context,
+                (binding.listRV.layoutManager as LinearLayoutManager).orientation
             )
         )
-        binding.currencyRecyclerView.adapter = cardsAdapter
+        binding.listRV.adapter = cardsAdapter
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setUpSearchField() {
         binding.searchET.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if(!binding.searchET.text.toString().isNullOrEmpty()) {
-                    Toast.makeText(requireContext(), binding.searchET.getText(), Toast.LENGTH_SHORT)
-                        .show()
+                if (!binding.searchET.text.toString().isNullOrEmpty()) {
+                    mainViewModel.fetchLatestResults(binding.searchET.text.toString())
                 }
                 return@OnEditorActionListener true
             }
@@ -85,7 +82,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
 
         binding.searchET.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                if(!binding.searchET.text.toString().isNullOrEmpty()) {
+                if (!binding.searchET.text.toString().isNullOrEmpty()) {
                     val drawableEnd =
                         binding.searchET.compoundDrawablesRelative[2] // index 2 is for drawableEnd
                     if (drawableEnd != null) {
@@ -96,11 +93,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
                         // Check if the touch is within the drawableEnd bounds
                         if (touchX >= viewWidth - binding.searchET.paddingEnd - drawableWidth) {
                             // Perform your action here
-                            Toast.makeText(
-                                requireContext(),
-                                "DrawableEnd clicked",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            mainViewModel.fetchLatestResults(binding.searchET.text.toString())
                             return@setOnTouchListener true
                         }
                     }
@@ -111,9 +104,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
     }
 
     private fun fetchCardsListing() {
-
-        loadJSONFromAsset()?.let { mainViewModel.loadData(it) }
-        //   mainViewModel.fetchLatestResults()
+        // mainViewModel.fetchLatestResults()
     }
 
     fun loadJSONFromAsset(): String? {
@@ -140,22 +131,31 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
     }
 
     private fun setupObserver() {
-        mainViewModel.deckOfCards.observe(viewLifecycleOwner) {
+        mainViewModel.carouselsLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     CoroutineScope(Dispatchers.Main).launch() {
                         binding.progressBar.visibility = View.GONE
-                        binding.currencyRecyclerView.visibility = View.VISIBLE
-                        val decOfCardsObject = it.data?.results
-                        if (decOfCardsObject != null) {
-                            renderCardsList(decOfCardsObject as MutableList<CarouselItem>)
+                        val results = it.data?.results
+                        if (results?.size == 0) {
+                            binding.errorTV.visibility = View.VISIBLE
+                            binding.listRV.visibility = View.GONE
+                        } else {
+                            binding.listRV.visibility = View.VISIBLE
+                            binding.errorTV.visibility = View.GONE
+                        }
+                        if (results != null) {
+                            val carousels =
+                                mainViewModel.renderCardsList(results as MutableList<CarouselItem>)
+                            // Update the adapter with the list
+                            cardsAdapter.updateData(carousels)
                         }
                     }
                 }
 
                 Status.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
-                    binding.currencyRecyclerView.visibility = View.GONE
+                    binding.listRV.visibility = View.GONE
                 }
 
                 Status.ERROR -> {
@@ -166,54 +166,6 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         }
     }
 
-/*    private fun renderCardsList(cardsList: MutableList<CarouselItem>) {
-        val finalList: MutableList<Carousels> = mutableListOf()
-        val tvCarousal = Carousels()
-        val movieCarousal = Carousels()
-        val otherCarousal = Carousels()
-        cardsList.forEach {
-            if(it.mediaType.toString() == MediaTypes.TV.identifier) {
-                tvCarousal.mediaType = it.mediaType.toString()
-                tvCarousal.results.add(it)
-            }
-            else if(it.mediaType.toString() == MediaTypes.MOVIE.identifier) {
-                movieCarousal.mediaType = it.mediaType.toString()
-                movieCarousal.results.add(it)
-            }
-            else {
-                otherCarousal.mediaType = it.mediaType.toString()
-                otherCarousal.results.add(it)
-            }
-
-        }
-        finalList.add(tvCarousal)
-        finalList.add(movieCarousal)
-        finalList.add(otherCarousal)
-
-        cardsAdapter.updateData(finalList)
-        //cardsAdapter.updateData(cardsList)
-    }*/
-
-    private fun renderCardsList(cardsList: MutableList<CarouselItem>) {
-        // Map to group CarouselItems by mediaType
-        val map = mutableMapOf<String, Carousels>()
-
-        // Group the items into their respective media types
-        cardsList.forEach { item ->
-            val mediaType = item.mediaType.toString()
-
-            // If the group for this media type doesn't exist, create a new one
-            val carousal = map.getOrPut(mediaType) { Carousels().apply { this.mediaType = mediaType } }
-            carousal.results.add(item)
-        }
-
-        // Convert the map values to a list for the adapter
-        val finalList = map.values.toMutableList()
-
-        // Update the adapter with the grouped list
-        cardsAdapter.updateData(finalList)
-    }
-
     override fun onCLick(carouselItem: CarouselItem) {
         val bundle = Bundle()
         bundle.putParcelable(ARG_PARAM, carouselItem)
@@ -221,4 +173,8 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         navController.navigate(R.id.cardFragment, bundle)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

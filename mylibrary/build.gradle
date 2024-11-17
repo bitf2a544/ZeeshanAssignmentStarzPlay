@@ -18,6 +18,7 @@ android {
         minSdk 24
         buildConfigField 'String', 'BASE_URL', "\"https://api.themoviedb.org/\""
         buildConfigField 'String', 'IMAGE_BASE_URL', "\"https://image.tmdb.org/t/p/original/\""
+        buildConfigField 'String', 'API_KEY', "\"3d0cda4466f269e793e9283f6ce0b75e\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

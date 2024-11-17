@@ -13,6 +13,7 @@ import com.example.mylibrary.data.model.CarouselItem
 import com.example.mylibrary.databinding.DetailFragmentBinding
 import com.example.mylibrary.utils.Constants
 import com.example.mylibrary.BuildConfig
+import com.example.mylibrary.enum.MediaTypes
 import com.example.zeeshanassignment.activity.VideoPlayerActivity
 
 class DetailFragment : Fragment() {
@@ -28,16 +29,16 @@ class DetailFragment : Fragment() {
         binding = DetailFragmentBinding.inflate(inflater, container, false)
         carouselItemObj = arguments?.getParcelable(Constants.ARG_PARAM)!!
 
-        if (carouselItemObj?.mediaType.toString() == "video" ||
-            carouselItemObj?.mediaType.toString() == "tv" ||
-            carouselItemObj?.mediaType.toString() == "movie"
+        if (carouselItemObj?.mediaType.toString() == MediaTypes.MOVIE.identifier ||
+            carouselItemObj?.mediaType.toString() == MediaTypes.TV.identifier ||
+            carouselItemObj?.mediaType.toString() == MediaTypes.OTHER.identifier
         ) {
             binding.playBtn.visibility = View.VISIBLE
         } else {
             binding.playBtn.visibility = View.GONE
         }
         binding.playBtn.setOnClickListener {
-            startActivity(Intent(requireContext(),VideoPlayerActivity::class.java))
+            startActivity(Intent(requireContext(), VideoPlayerActivity::class.java))
         }
         setTextInCardView()
         loadImageInImageView()
@@ -51,7 +52,10 @@ class DetailFragment : Fragment() {
                 binding.titleTV.text = it.originalTitle
             else
                 binding.titleTV.text = it.originalName
-            binding.overviewTV.text = it.overview.toString()
+
+            if (!it.overview.isNullOrEmpty()) {
+                binding.overviewTV.text = it.overview.toString()
+            }
         }
     }
 
@@ -60,8 +64,10 @@ class DetailFragment : Fragment() {
             var imgName = ""
             if (!it.backdropPath.isNullOrEmpty()) {
                 imgName = it.backdropPath.toString()
-            } else {
+            } else if (!it.posterPath.isNullOrEmpty()) {
                 imgName = it.posterPath.toString()
+            } else {
+                imgName = it.profilePath.toString()
             }
             Glide.with(requireContext())
                 .load(BuildConfig.IMAGE_BASE_URL + imgName) // image url

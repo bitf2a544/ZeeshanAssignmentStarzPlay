@@ -88,7 +88,7 @@ class MainViewModelTest {
 
         repository = MainRepository(apiHelper, networkHelper)
         viewModel = MainViewModel(repository)
-        viewModel.getDeckOfCardsMutableLiveData().observeForever(cardListingObserver)
+        viewModel.getCarouselsMutableLiveData().observeForever(cardListingObserver)
         mockWebServer = MockWebServer()
         mockWebServer.start()
     }
@@ -129,7 +129,7 @@ class MainViewModelTest {
 
     @After
     fun tearDown() {
-        viewModel.getDeckOfCardsMutableLiveData().removeObserver(cardListingObserver)
+        viewModel.getCarouselsMutableLiveData().removeObserver(cardListingObserver)
         mockWebServer.shutdown()
     }
 }

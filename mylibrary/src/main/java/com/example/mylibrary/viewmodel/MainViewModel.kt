@@ -1,6 +1,8 @@
 package com.example.mylibrary.viewmodel
 
 import androidx.lifecycle.*
+import com.example.mylibrary.BuildConfig
+import com.example.mylibrary.data.model.CarouselItem
 import com.example.mylibrary.repository.MainRepository
 import com.example.mylibrary.utils.Resource
 import com.example.mylibrary.data.model.Carousels
@@ -17,28 +19,28 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
 
-    private val _deckOfCards = MutableLiveData<Resource<Carousels>>()
-    val deckOfCards: LiveData<Resource<Carousels>> get() = _deckOfCards
+    private val _carouselsMutableLiveData = MutableLiveData<Resource<Carousels>>()
+    val carouselsLiveData: LiveData<Resource<Carousels>> get() = _carouselsMutableLiveData
 
-    fun fetchLatestResults() {
-        _deckOfCards.postValue(Resource.loading(null))
+    fun fetchLatestResults(query: String) {
+        _carouselsMutableLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             viewModelScope.launch {
                 try {
                     if (mainRepository.isNetworkAvailable()) {
-                        mainRepository.getLatestResultsFromNetwork("3d0cda4466f269e793e9283f6ce0b75e","jobs")
+                        mainRepository.getLatestResultsFromNetwork(BuildConfig.API_KEY, query)
                             .let {
                                 if (it.isSuccessful) {
-                                    _deckOfCards.postValue(Resource.success(it.body()))
+                                    _carouselsMutableLiveData.postValue(Resource.success(it.body()))
                                 } else {
-                                    _deckOfCards.postValue(
+                                    _carouselsMutableLiveData.postValue(
                                         Resource.error(
                                             it.errorBody().toString(), null
                                         )
                                     )
                                 }
                             }
-                    } else _deckOfCards.postValue(
+                    } else _carouselsMutableLiveData.postValue(
                         Resource.error(
                             "No internet connection",
                             null
@@ -50,33 +52,47 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
             }
         }
     }
+    fun loadData(jsonStringFromAssets: String) {
+        _carouselsMutableLiveData.postValue(Resource.loading(null))
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
+                try {
+                    if (mainRepository.isNetworkAvailable()) {
+                        val detail = Gson().fromJson(jsonStringFromAssets, Carousels::class.java)
+                        delay(1000)
+                        _carouselsMutableLiveData.postValue(Resource.success(detail))
+                    } else _carouselsMutableLiveData.postValue(
+                        Resource.error(
+                            "No internet connection",
+                            null
+                        )
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+    fun renderCardsList(cardsList: MutableList<CarouselItem>): MutableList<Carousels> {
+        // Map to group CarouselItems by mediaType
+        val map = mutableMapOf<String, Carousels>()
 
+        // Group the items into their respective media types
+        cardsList.forEach { item ->
+            val mediaType = item.mediaType.toString()
 
-      fun loadData(jsonStringFromAssets: String) {
-          _deckOfCards.postValue(Resource.loading(null))
-          CoroutineScope(Dispatchers.IO).launch {
-              viewModelScope.launch {
-                  try {
-                      if (mainRepository.isNetworkAvailable()) {
-                          val detail = Gson().fromJson(jsonStringFromAssets, Carousels::class.java)
-                          delay(1000)
-                          _deckOfCards.postValue(Resource.success(detail))
-                      } else _deckOfCards.postValue(
-                          Resource.error(
-                              "No internet connection",
-                              null
-                          )
-                      )
-                  } catch (e: Exception) {
-                      e.printStackTrace()
-                  }
-              }
-          }
+            // If the group for this media type doesn't exist, create a new one
+            val carousal =
+                map.getOrPut(mediaType) { Carousels().apply { this.mediaType = mediaType } }
+            carousal.results.add(item)
+        }
+
+        // Convert the map values to a list for the adapter
+        return map.values.toMutableList()
     }
 
-
-    fun getDeckOfCardsMutableLiveData(): LiveData<Resource<Carousels>?> {
-        return _deckOfCards
+    fun getCarouselsMutableLiveData(): LiveData<Resource<Carousels>?> {
+        return _carouselsMutableLiveData
     }
 
 }
