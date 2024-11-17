@@ -1,4 +1,4 @@
-package com.example.mylibrary.viewmodel
+package com.example.zeeshanassignment.viewmodel
 
 import androidx.lifecycle.*
 import com.example.mylibrary.BuildConfig

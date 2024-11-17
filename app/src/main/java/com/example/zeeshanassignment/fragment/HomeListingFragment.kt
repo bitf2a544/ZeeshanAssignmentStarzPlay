@@ -23,7 +23,7 @@ import com.example.zeeshanassignment.listener.CarouselItemClickListener
 import com.example.zeeshanassignment.databinding.CarouselListFragmentBinding
 import com.example.mylibrary.utils.Constants.Companion.ARG_PARAM
 import com.example.mylibrary.utils.Status
-import com.example.mylibrary.viewmodel.MainViewModel
+import com.example.zeeshanassignment.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 import kotlinx.coroutines.CoroutineScope

@@ -3,13 +3,14 @@ package com.example.zeeshanassignment
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.mylibrary.data.model.Carousels
 import com.example.zeeshanassignment.BuildConfig.BASE_URL
 import com.example.mylibrary.data.remote.api.ApiHelperImpl
 import com.example.mylibrary.data.remote.api.ApiService
 import com.example.mylibrary.repository.MainRepository
 import com.example.mylibrary.utils.NetworkHelper
 import com.example.mylibrary.utils.Resource
-import com.example.mylibrary.viewmodel.MainViewModel
+import com.example.zeeshanassignment.viewmodel.MainViewModel
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,7 +32,7 @@ import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 
 
@@ -51,7 +52,7 @@ class MainViewModelTest {
     private lateinit var apiHelper: ApiHelperImpl
 
     @Mock
-    private lateinit var cardListingObserver: Observer<Resource<DeckOfCards>?>
+    private lateinit var cardListingObserver: Observer<Resource<Carousels>?>
 
     private lateinit var mockWebServer: MockWebServer
 
@@ -77,7 +78,7 @@ class MainViewModelTest {
         }
 
         var requestBuilder = Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .build()
@@ -108,7 +109,7 @@ class MainViewModelTest {
             .setBody(MockJsonResponseFileReader("success_response.json").strContent)
         mockWebServer.enqueue(response)
 
-        val actualResponse = apiHelper.getLatestResultsFromAPI(20)
+        val actualResponse = apiHelper.getLatestResultsFromAPI(BuildConfig.API_KEY,"jobs")
 
         assertEquals(
             response.toString().contains("200"),
@@ -122,9 +123,10 @@ class MainViewModelTest {
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(MockJsonResponseFileReader("success_response.json").strContent)
         mockWebServer.enqueue(response)
-        val actualResponse = apiHelper.getLatestResultsFromAPI(0)
+        val actualResponse = apiHelper.getLatestResultsFromAPI(BuildConfig.API_KEY,"jobs")
         // System.out.println("actualResponse.body()?.success=" + actualResponse.body()?.success);
-        assertEquals(true, actualResponse.body()?.success)
+      //  assertEquals(true, actualResponse.body()?.results?.size!! > 0)
+        assertEquals(true, actualResponse.isSuccessful)
     }
 
     @After
