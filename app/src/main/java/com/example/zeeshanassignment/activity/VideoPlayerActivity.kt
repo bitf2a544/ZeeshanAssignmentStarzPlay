@@ -18,7 +18,6 @@ class VideoPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.hide()
 
         // Hide the system UI for fullscreen experience

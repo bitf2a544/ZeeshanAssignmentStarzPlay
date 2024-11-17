@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
 import com.example.zeeshanassignment.adapter.ListAdapter
 import com.example.mylibrary.data.model.CarouselItem
+import com.example.mylibrary.utils.CommonUtils
 import com.example.zeeshanassignment.listener.CarouselItemClickListener
 import com.example.zeeshanassignment.databinding.CarouselListFragmentBinding
 import com.example.mylibrary.utils.Constants.Companion.ARG_PARAM
@@ -28,8 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.IOException
-import java.nio.charset.Charset
 
 @AndroidEntryPoint
 class HomeListingFragment : Fragment(), CarouselItemClickListener {
@@ -52,6 +51,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
         setUpRecyclerView()
         setUpSearchField()
         setupObserver()
+        //fetchDataFromJsonFile()
     }
 
     private fun setUpRecyclerView() {
@@ -71,7 +71,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
     private fun setUpSearchField() {
         binding.searchET.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (!binding.searchET.text.toString().isNullOrEmpty()) {
+                if (binding.searchET.text.toString().isNotEmpty()) {
                     mainViewModel.fetchLatestResults(binding.searchET.text.toString())
                 }
                 return@OnEditorActionListener true
@@ -81,7 +81,7 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
 
         binding.searchET.setOnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
-                if (!binding.searchET.text.toString().isNullOrEmpty()) {
+                if (binding.searchET.text.toString().isNotEmpty()) {
                     val drawableEnd =
                         binding.searchET.compoundDrawablesRelative[2] // index 2 is for drawableEnd
                     if (drawableEnd != null) {
@@ -100,33 +100,6 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
             }
             false
         }
-    }
-
-    private fun fetchCardsListing() {
-        // mainViewModel.fetchLatestResults()
-    }
-
-    fun loadJSONFromAsset(): String? {
-
-        var json: String? = null
-        try {
-            val inStreem = requireContext().assets.open("jobs_result.json")
-
-            val size = inStreem.available()
-
-            val buffer = ByteArray(size)
-
-            inStreem.read(buffer)
-
-            inStreem.close()
-
-            json = String(buffer, Charset.defaultCharset())
-
-
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
-        return json
     }
 
     private fun setupObserver() {
@@ -163,6 +136,10 @@ class HomeListingFragment : Fragment(), CarouselItemClickListener {
                 }
             }
         }
+    }
+
+    private fun fetchDataFromJsonFile() {
+        mainViewModel.loadLocalJsonData(CommonUtils.loadJSONFromAsset(requireContext()))
     }
 
     override fun onCLick(carouselItem: CarouselItem) {

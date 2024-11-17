@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor(private val mainRepository: MainReposito
             }
         }
     }
-    fun loadLocalJsonData(jsonStringFromAssets: String) {
+    fun loadLocalJsonData(jsonStringFromAssets: String?) {
         _carouselsMutableLiveData.postValue(Resource.loading(null))
         CoroutineScope(Dispatchers.IO).launch {
             viewModelScope.launch {
